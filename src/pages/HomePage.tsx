@@ -12,11 +12,11 @@ const infoItems = [
 export function HomePage() {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* 装饰性几何色块 — 橙蓝色系 */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-primary/8 rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/8 rounded-full translate-y-1/2 -translate-x-1/4 pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-primary/5 rounded-full pointer-events-none" />
-      <div className="absolute top-1/4 left-1/3 w-24 h-24 bg-accent/5 rounded-full pointer-events-none" />
+      {/* 装饰性几何色块 — 蓝色天空 + 橙色活力 */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/5 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary/6 rounded-full translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+      <div className="absolute top-1/3 right-1/5 w-48 h-48 bg-accent/6 rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-accent/4 rounded-full pointer-events-none" />
 
       {/* 主内容 */}
       <main className="relative z-10 max-w-5xl mx-auto px-4 py-8 md:py-16">
