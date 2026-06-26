@@ -21,15 +21,13 @@ export function HomePage() {
           </h2>
         </div>
 
-        {/* 双栏布局 */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8 items-start">
-          {/* 左侧：个人信息 */}
-          <div className="md:col-span-2">
-            <ProfileCard />
-          </div>
+        {/* 上下布局：头像在上，聊天框在下 */}
+        <div className="flex flex-col items-center gap-8">
+          {/* 个人信息 */}
+          <ProfileCard />
 
-          {/* 右侧：聊天区 */}
-          <div className="md:col-span-3">
+          {/* 聊天区 */}
+          <div className="w-full max-w-xl">
             <div className="h-[500px] md:h-[560px]">
               <ChatPanel />
             </div>
