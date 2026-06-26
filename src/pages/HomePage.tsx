@@ -12,10 +12,11 @@ const infoItems = [
 export function HomePage() {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* 装饰性几何色块 */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/5 rounded-full translate-y-1/2 -translate-x-1/3 pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-primary/3 rounded-full pointer-events-none" />
+      {/* 装饰性几何色块 — 橙蓝色系 */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-primary/8 rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/8 rounded-full translate-y-1/2 -translate-x-1/4 pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-primary/5 rounded-full pointer-events-none" />
+      <div className="absolute top-1/4 left-1/3 w-24 h-24 bg-accent/5 rounded-full pointer-events-none" />
 
       {/* 主内容 */}
       <main className="relative z-10 max-w-5xl mx-auto px-4 py-8 md:py-16">
@@ -29,13 +30,31 @@ export function HomePage() {
           </h2>
         </div>
 
-        {/* 上下布局：头像在上，聊天框在下 */}
-        <div className="flex flex-col items-center gap-8">
-          {/* 个人信息 */}
-          <ProfileCard />
+        {/* 左右布局：头像在左，聊天框在右 */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8 items-start">
+          {/* 左侧：个人信息 */}
+          <div className="md:col-span-2 flex flex-col items-center">
+            <ProfileCard />
 
-          {/* 聊天区 */}
-          <div className="w-full max-w-xl">
+            {/* 三个栏目：头像下方横排 */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
+            >
+              {infoItems.map((item) => (
+                <div key={item.label} className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <item.icon className="w-3 h-3 text-primary/70" />
+                  <span className="text-muted-foreground/80">{item.label}：</span>
+                  <span className="text-foreground/90 font-medium">{item.value}</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* 右侧：聊天区 */}
+          <div className="md:col-span-3">
             <div className="h-[500px] md:h-[560px]">
               <ChatPanel />
             </div>
@@ -43,23 +62,7 @@ export function HomePage() {
         </div>
 
         {/* 页脚 */}
-        <footer className="mt-12 text-center space-y-4">
-          {/* 三个栏目：底部横排小字 */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
-          >
-            {infoItems.map((item) => (
-              <div key={item.label} className="flex items-center gap-1 text-xs text-muted-foreground">
-                <item.icon className="w-3 h-3 text-primary/70" />
-                <span className="text-muted-foreground/80">{item.label}：</span>
-                <span className="text-foreground/90 font-medium">{item.value}</span>
-              </div>
-            ))}
-          </motion.div>
-
+        <footer className="mt-12 text-center">
           <p className="text-xs text-muted-foreground">
             © 2026 Huky · 教育产品专家，史哲人类爱好者
           </p>
