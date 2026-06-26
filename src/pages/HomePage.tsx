@@ -1,5 +1,13 @@
+import { motion } from "framer-motion";
+import { Briefcase, Lightbulb, Sparkles } from "lucide-react";
 import { ProfileCard } from "@/components/ProfileCard";
 import { ChatPanel } from "@/components/ChatPanel";
+
+const infoItems = [
+  { icon: Briefcase, label: "现在主要在做", value: "教育产品设计" },
+  { icon: Lightbulb, label: "我的擅长", value: "教产融通" },
+  { icon: Sparkles, label: "一个比较有记忆点的特点", value: "星星也是光" },
+];
 
 export function HomePage() {
   return (
@@ -35,7 +43,23 @@ export function HomePage() {
         </div>
 
         {/* 页脚 */}
-        <footer className="mt-12 text-center">
+        <footer className="mt-12 text-center space-y-4">
+          {/* 三个栏目：底部横排小字 */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
+          >
+            {infoItems.map((item) => (
+              <div key={item.label} className="flex items-center gap-1 text-xs text-muted-foreground">
+                <item.icon className="w-3 h-3 text-primary/70" />
+                <span className="text-muted-foreground/80">{item.label}：</span>
+                <span className="text-foreground/90 font-medium">{item.value}</span>
+              </div>
+            ))}
+          </motion.div>
+
           <p className="text-xs text-muted-foreground">
             © 2026 Huky · 教育产品专家，史哲人类爱好者
           </p>
