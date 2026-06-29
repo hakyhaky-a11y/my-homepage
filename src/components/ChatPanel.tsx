@@ -3,9 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, User, Loader2, StopCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { sendStreamRequest } from "@/lib/sse";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+import { supabaseUrl, supabaseAnonKey } from "@/db/supabase";
 
 interface Message {
   id: string;
@@ -14,9 +12,9 @@ interface Message {
 }
 
 const SUGGESTED_QUESTIONS = [
-  "学什么比较好？",
+  "学历与学力",
   "未来教育行业怎么样？",
-  "怎么规划职业发展？",
+  "专业职业行业",
 ];
 
 export function ChatPanel() {
@@ -117,49 +115,49 @@ export function ChatPanel() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-      className="flex flex-col h-full bg-card border border-border rounded-xl overflow-hidden"
-    >
-      {/* 聊天区标题 */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/50">
-        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-          <Bot className="w-4 h-4 text-primary-foreground" />
+    <div className="flex flex-col h-full bg-card">
+      <div className="flex items-center gap-3 px-4 md:px-6 py-3 md:py-4 border-b border-border bg-background/50 backdrop-blur-sm">
+        <div className="relative">
+          <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-md shadow-primary/20">
+            <Bot className="w-4 h-4 md:w-5 md:h-5 text-primary-foreground" />
+          </div>
+          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
         </div>
-        <div>
-          <p className="text-sm font-semibold text-foreground">Huky 的数字分身</p>
-          <p className="text-xs text-muted-foreground">可以问我关于教育、学习、规划的问题</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm md:text-base font-semibold text-foreground truncate">Huky 的数字分身</p>
+          <p className="text-xs text-muted-foreground truncate">在线 · 聊聊教育、学习和职业规划</p>
         </div>
       </div>
 
-      {/* 消息列表 */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0"
+        className="flex-1 overflow-y-auto p-3 md:p-5 space-y-3 md:space-y-4 min-h-0 bg-muted/20"
       >
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <Bot className="w-6 h-6 text-primary" />
+          <div className="flex flex-col items-center justify-center h-full space-y-5 md:space-y-6 text-center px-2">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+              <Bot className="w-7 h-7 md:w-8 md:h-8 text-primary" />
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-foreground">你好！我是 Huky 的数字分身</p>
-              <p className="text-xs text-muted-foreground">你可以问我关于教育、学习、职业规划的问题</p>
+            <div className="space-y-2">
+              <p className="text-base md:text-lg font-semibold text-foreground">你好，我是 Huky 的数字分身</p>
+              <p className="text-xs md:text-sm text-muted-foreground max-w-sm">
+                我可以和你聊聊教育产品、学习方法、职业发展的话题
+              </p>
             </div>
-            {/* 推荐问题 */}
-            <div className="flex flex-wrap gap-2 justify-center max-w-xs">
-              {SUGGESTED_QUESTIONS.map((q) => (
-                <button
-                  key={q}
-                  type="button"
-                  onClick={() => handleSend(q)}
-                  className="text-xs px-3 py-1.5 rounded-full border border-primary/30 text-primary hover:bg-primary/5 transition-colors"
-                >
-                  {q}
-                </button>
-              ))}
+            <div className="space-y-2 w-full max-w-sm">
+              <p className="text-xs text-muted-foreground text-left">试试问我：</p>
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
+                {SUGGESTED_QUESTIONS.map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => handleSend(q)}
+                    className="text-sm px-4 py-2.5 rounded-xl bg-card border border-border text-foreground hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-all cursor-pointer text-left flex-1"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -171,26 +169,26 @@ export function ChatPanel() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
-              className={`flex gap-2 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}
+              className={`flex gap-2 md:gap-2.5 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}
             >
               <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
+                className={`w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center shrink-0 ${
                   msg.role === "user"
                     ? "bg-accent"
                     : "bg-primary"
                 }`}
               >
                 {msg.role === "user" ? (
-                  <User className="w-3.5 h-3.5 text-accent-foreground" />
+                  <User className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent-foreground" />
                 ) : (
-                  <Bot className="w-3.5 h-3.5 text-primary-foreground" />
+                  <Bot className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary-foreground" />
                 )}
               </div>
               <div
-                className={`max-w-[75%] px-3 py-2 rounded-lg text-sm leading-relaxed ${
+                className={`max-w-[78%] md:max-w-[75%] px-3 py-2 md:px-3.5 md:py-2.5 rounded-2xl text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-accent text-accent-foreground"
-                    : "bg-muted text-foreground"
+                    ? "bg-primary text-primary-foreground rounded-tr-sm"
+                    : "bg-card border border-border text-foreground rounded-tl-sm"
                 }`}
               >
                 {msg.content || (
@@ -202,23 +200,22 @@ export function ChatPanel() {
         </AnimatePresence>
       </div>
 
-      {/* 输入区 */}
-      <div className="p-3 border-t border-border bg-muted/30">
-        <div className="flex gap-2">
+      <div className="p-3 md:p-4 border-t border-border bg-background/50 backdrop-blur-sm">
+        <div className="flex gap-2 items-end">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="输入你的问题..."
             rows={1}
-            className="flex-1 min-w-0 resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground"
+            className="flex-1 min-w-0 resize-none rounded-xl border border-border bg-card px-3 md:px-4 py-2 md:py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 placeholder:text-muted-foreground transition-all"
           />
           {isStreaming ? (
             <Button
               variant="outline"
               size="icon"
               onClick={handleAbort}
-              className="shrink-0"
+              className="shrink-0 h-10 w-10 rounded-xl"
             >
               <StopCircle className="w-4 h-4" />
             </Button>
@@ -227,13 +224,13 @@ export function ChatPanel() {
               size="icon"
               onClick={() => handleSend(input)}
               disabled={!input.trim()}
-              className="shrink-0"
+              className="shrink-0 h-10 w-10 rounded-xl shadow-md shadow-primary/20"
             >
               <Send className="w-4 h-4" />
             </Button>
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
